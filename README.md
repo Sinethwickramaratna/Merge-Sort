@@ -33,7 +33,9 @@ Now the array is fully sorted.
 Time Complexity
 
 Best Case: 𝑂(𝑛log𝑛)
+
 Worst Case: 𝑂(𝑛log𝑛)
+
 Average Case: 𝑂(𝑛log⁡𝑛)
 
 Space Complexity

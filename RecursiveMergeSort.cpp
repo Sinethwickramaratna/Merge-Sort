@@ -1,94 +1,78 @@
-// C++ program to find out execution time of
-// of functions
-#include <algorithm>
-#include <chrono>
 #include <iostream>
-#include<vector>
+#include <vector>
+
 using namespace std;
-using namespace std::chrono;
 
-// For demonstration purpose, we will fill up
-// a vector with random integers and then sort
-// them using sort function. We fill record
-// and print the time required by sort function
-
-vector <int> merge(vector <int> arr,vector <int> leftArr,vector <int> rightArr){
-    int n1=leftArr.size();
-    int n2=rightArr.size();
-    int size = arr.size();
-    int i=0, j=0, k=0;
+// Function to merge two sorted subarrays into a single sorted array
+vector<int> merge(vector<int> leftArr, vector<int> rightArr) {
+    int n1 = leftArr.size();
+    int n2 = rightArr.size();
+    vector<int> mergedArr; // Resultant merged array
     
-    while(i<n1 && j<n2){
-        if (leftArr[i]<rightArr[j]){
-            arr[k]=leftArr[i];
+    int i = 0, j = 0;
+    
+    // Merge elements from leftArr and rightArr in sorted order
+    while (i < n1 && j < n2) {
+        if (leftArr[i] < rightArr[j]) {
+            mergedArr.push_back(leftArr[i]);
             i++;
-        }else{
-            arr[k]=rightArr[j];
+        } else {
+            mergedArr.push_back(rightArr[j]);
             j++;
         }
-        k++;
     }
     
-    while(i<n1 && k<size){
-        arr[k]=leftArr[i];
+    // Copy remaining elements from leftArr (if any)
+    while (i < n1) {
+        mergedArr.push_back(leftArr[i]);
         i++;
-        k++;
     }
     
-    while (j<n2 && k<size){
-        arr[k]=rightArr[j];
+    // Copy remaining elements from rightArr (if any)
+    while (j < n2) {
+        mergedArr.push_back(rightArr[j]);
         j++;
-        k++;
     }
     
-    return arr;
+    return mergedArr; // Return the merged sorted array
 }
 
-
-vector <int> mergeSort (vector <int> arr){
-    int mid = arr.size()/2;
-    vector <int> leftArr(arr.begin(), arr.begin()+mid);
-    vector <int> rightArr (arr.begin()+mid, arr.end());
+// Function to perform recursive merge sort
+vector<int> mergeSort(vector<int> arr) {
     int size = arr.size();
-    if (size<=1){
+    
+    // Base case: if array has one or zero elements, it's already sorted
+    if (size <= 1) {
         return arr;
     }
-    rightArr = mergeSort(rightArr);
+
+    // Find the middle index of the array
+    int mid = size / 2;
+
+    // Split the array into two halves: left and right
+    vector<int> leftArr(arr.begin(), arr.begin() + mid);
+    vector<int> rightArr(arr.begin() + mid, arr.end());
+
+    // Recursively sort both halves
     leftArr = mergeSort(leftArr);
-    
-    return merge(arr,leftArr,rightArr);
+    rightArr = mergeSort(rightArr);
+
+    // Merge the sorted halves and return the final sorted array
+    return merge(leftArr, rightArr);
 }
 
+int main() {
+    // Sample input array
+    vector<int> arr = {40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-int main()
-{
+    // Sort the array using mergeSort
+    vector<int> sortedArr = mergeSort(arr);
 
-    vector<int> values(10000);
-
-    // Generate Random values
-    auto f = []() -> int { return rand() % 10000; };
-
-    // Fill up the vector
-    vector <int> arr = {40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
-    // Get starting timepoint
-    auto start = high_resolution_clock::now();
-
-    // Call the function, here sort()
-    for(int i: mergeSort(arr)){
-        cout<< i <<" ";
+    // Output the sorted array
+    for (int i : sortedArr) {
+        cout << i << " ";
     }
     cout << endl;
-
-    // Get ending timepoint
-    auto stop = high_resolution_clock::now();
-
-    // Get duration. Substart timepoints to 
-    // get duration. To cast it to proper unit
-    // use duration cast method
-    auto duration = duration_cast<microseconds>(stop - start);
-
-    cout << "Time taken by function: "
-         << duration.count() << " microseconds" << endl;
 
     return 0;
 }

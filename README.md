@@ -44,4 +44,5 @@ Requires O(n) extra space for merging.
 Key Features
 
 Stable Sort (Preserves order of equal elements)
+
 Efficient for large datasets
